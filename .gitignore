@@ -31,6 +31,6 @@ tests/_support/_generated
 
 #vagrant
 /.vagrant
-/_o-rly
+/_pt-slug
 /Vagrantfile
 ubuntu-bionic-18.04-cloudimg-console.log
