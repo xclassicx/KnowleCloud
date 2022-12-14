@@ -1,55 +1,85 @@
 <?php
 
+use app\models\Account;
+use app\services\Route;
+use yii\caching\FileCache;
+use yii\debug\Module;
+use yii\gii\Module as GiiModule;
+use yii\log\FileTarget;
+use yii\swiftmailer\Mailer;
+use yii\web\UrlManager;
+use yii\web\UrlNormalizer;
+use yii\web\User;
+
 $db = require __DIR__ . '/db.php';
 
 $config = [
-    'id' => 'basic',
-    'basePath' => dirname(__DIR__),
-    'bootstrap' => ['log'],
-    'aliases' => [
+    'id'         => 'basic',
+    'name'       => 'knowlecloud',
+    'basePath'   => dirname(__DIR__),
+    'bootstrap'  => ['log'],
+    'aliases'    => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
     ],
     'components' => [
-        'request' => [
+        'request'      => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
-            'cookieValidationKey' => 'GySmPTMb3pRfLblCXOl6UbMAWc6k8c9g',
+            'cookieValidationKey' => 'Wb=%zsL=jeu.7wKbDPf7T7@3A*CYM:vVq5eDtarH?#)toFr>rw)t.sJCCFG7cfvd',
         ],
-        'cache' => [
-            'class' => 'yii\caching\FileCache',
+        'cache'        => [
+            'class' => FileCache::class,
         ],
-        'user' => [
-            'identityClass' => 'app\models\User',
+        'user'         => [
+            'class'           => User::class,
+            'identityClass'   => Account::class,
             'enableAutoLogin' => true,
+            'identityCookie'  => ['name' => '_identity', 'httpOnly' => true],
+            'loginUrl'        => [Route::LOGIN],
+            'enableSession'   => true,
         ],
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-        'mailer' => [
-            'class' => 'yii\swiftmailer\Mailer',
-            // send all mails to a file by default. You have to set
-            // 'useFileTransport' to false and configure transport
-            // for the mailer to send real emails.
-            'useFileTransport' => true,
+        'mailer'       => [
+            'class'         => Mailer::class,
+            'messageConfig' => [
+                'from'    => ['noreply@knowlecloud.ru' => 'knowlecloud'],
+                'charset' => 'UTF-8',
+            ],
+            'transport'     => [
+                'class'         => Swift_SmtpTransport::class,
+                'host'          => 'localhost',
+                'username'      => '',
+                'password'      => '',
+                'port'          => '1025', // Port 25 is a very common port too
+                'constructArgs' => ['localhost', 1025, ''], // Swift_Transport_EsmtpTransport не умеет в стрикт - указываем аргументы явно(особенно - последний)
+                //    'encryption' => 'tls', // It is often used, check your provider or mail server specs
+            ],
         ],
-        'log' => [
+        'log'          => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
-            'targets' => [
+            'targets'    => [
                 [
-                    'class' => 'yii\log\FileTarget',
+                    'class'  => FileTarget::class,
                     'levels' => ['error', 'warning'],
                 ],
             ],
         ],
-        'db' => $db,
-        /*
-        'urlManager' => [
-            'enablePrettyUrl' => true,
-            'showScriptName' => false,
-            'rules' => [
+        'urlManager'   => [
+            'class'               => UrlManager::class,
+            'baseUrl'             => '',
+            'enablePrettyUrl'     => true,
+            'showScriptName'      => false,
+            'enableStrictParsing' => true,
+            'normalizer'          => [
+                'class'                  => UrlNormalizer::class,
+                'collapseSlashes'        => true,
+                'normalizeTrailingSlash' => true,
             ],
+            'rules'               => Route::getRules(),
         ],
-        */
+        'db'           => $db,
     ],
 ];
 
@@ -57,16 +87,16 @@ if (YII_ENV_DEV) {
     // configuration adjustments for 'dev' environment
     $config['bootstrap'][] = 'debug';
     $config['modules']['debug'] = [
-        'class' => 'yii\debug\Module',
+        'class'      => Module::class,
         // uncomment the following to add your IP if you are not connecting from localhost.
-        //'allowedIPs' => ['127.0.0.1', '::1'],
+        'allowedIPs' => ['127.0.0.1', '192.168.56.1'],
     ];
 
     $config['bootstrap'][] = 'gii';
     $config['modules']['gii'] = [
-        'class' => 'yii\gii\Module',
+        'class'      => GiiModule::class,
         // uncomment the following to add your IP if you are not connecting from localhost.
-        //'allowedIPs' => ['127.0.0.1', '::1'],
+        'allowedIPs' => ['127.0.0.1', '::1'],
     ];
 }
 
