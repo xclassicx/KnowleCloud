@@ -1,0 +1,20 @@
+header {
+    min-height: 56px;
+}
+
+#alerts .alert {
+    margin-bottom: 0;
+}
+
+.card-view-document {
+    width: auto;
+}
+
+.card-document:hover {
+    box-shadow: 0 0 5px #aaaaaa80;
+}
+
+.card-document a {
+    text-decoration: none;
+    color: var(--bs-dark);
+}

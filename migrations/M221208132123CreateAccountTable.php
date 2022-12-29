@@ -7,7 +7,7 @@ use yii\db\Migration;
 /**
  * Handles the creation of table `account`
  */
-class m221208_132123_create_account_table extends Migration
+class M221208132123CreateAccountTable extends Migration
 {
     /**
      * {@inheritdoc}

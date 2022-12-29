@@ -68,7 +68,7 @@ class LoginController extends Controller
         }
 
         Yii::$app->user->login($user, $mForm->rememberMe ? 3600 * 24 * 30 : 0);
-        return $this->goHome();
+        return $this->goBack();
     }
 
     /**

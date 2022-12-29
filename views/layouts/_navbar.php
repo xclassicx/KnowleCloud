@@ -5,6 +5,12 @@ use app\services\WebUser;
 use yii\helpers\Html;
 use yii\helpers\Url;
 
+/**
+ * Vars helper. Under the cut
+ *
+ * @var \yii\web\View $this
+ */
+
 $mAuthUser = WebUser::getAuthUser();
 ?>
 <nav class="navbar fixed-top navbar-expand-lg bg-light">
@@ -29,6 +35,9 @@ $mAuthUser = WebUser::getAuthUser();
                         <?= Html::encode($mAuthUser->getSiteName()) ?>
                     </a>
                     <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="<?= Url::toRoute(Route::DOCUMENT_CREATE) ?>">Загрузить документ</a></li>
+                        <li><a class="dropdown-item" href="<?= Url::toRoute(Route::DOCUMENT_MY) ?>">Мои документы</a></li>
+                        <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="<?= Url::toRoute(Route::LOGOUT) ?>" data-method="post">Выйти</a></li>
                     </ul>
                 </li>

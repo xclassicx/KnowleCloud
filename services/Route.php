@@ -2,6 +2,7 @@
 
 namespace app\services;
 
+use app\controllers\DocumentController;
 use app\controllers\LoginController;
 use app\controllers\SiteController;
 use app\controllers\RegistrationController;
@@ -13,24 +14,59 @@ class Route
 {
     /******************************** base *******************************/
     /** @see SiteController::actionIndex() */
-    const ROOT = '/' . SiteController::NAME . '/index';
+    public const ROOT = '/' . SiteController::NAME . '/index';
 
     /** @see SiteController::actionAbout() */
-    const ABOUT = '/' . SiteController::NAME . '/about';
+    public const ABOUT = '/' . SiteController::NAME . '/about';
 
     /******************************** registration *******************************/
     /** @see RegistrationController::actionRegistration() */
-    const REGISTRATION = '/' . RegistrationController::NAME . '/registration';
+    public const REGISTRATION = '/' . RegistrationController::NAME . '/registration';
 
     /** @see RegistrationController::actionEmailConfirm() */
-    const REGISTRATION_CONFIRM = '/' . RegistrationController::NAME . '/email-confirm';
+    public const REGISTRATION_CONFIRM = '/' . RegistrationController::NAME . '/email-confirm';
 
     /******************************** login *******************************/
     /** @see LoginController::actionLogin() */
-    const LOGIN = '/' . LoginController::NAME . '/login';
+    public const LOGIN = '/' . LoginController::NAME . '/login';
 
     /** @see LoginController::actionLogout() */
-    const LOGOUT = '/' . LoginController::NAME . '/logout';
+    public const LOGOUT = '/' . LoginController::NAME . '/logout';
+
+    /******************************** document *******************************/
+    /** @see DocumentController::actionCreate() */
+    public const DOCUMENT_CREATE = '/' . DocumentController::NAME . '/create';
+
+    /**
+     * <code>Params: &lt;iDocumentId:[1-9]\d*&gt;</code>
+     *
+     * @see DocumentController::actionView()
+     */
+    public const DOCUMENT_VIEW = '/' . DocumentController::NAME . '/view';
+
+    /**
+     * <code>Params: &lt;iDocumentId:[1-9]\d*&gt;</code>
+     *
+     * @see DocumentController::actionDownload()
+     */
+    public const DOCUMENT_DOWNLOAD = '/' . DocumentController::NAME . '/download';
+
+    /**
+     * <code>Params: &lt;iDocumentId:[1-9]\d*&gt;</code>
+     *
+     * @see DocumentController::actionUpdate()
+     */
+    public const DOCUMENT_UPDATE = '/' . DocumentController::NAME . '/update';
+
+    /**
+     * <code>Params: &lt;iDocumentId:[1-9]\d*&gt;</code>
+     *
+     * @see DocumentController::actionDelete()
+     */
+    public const DOCUMENT_DELETE = '/' . DocumentController::NAME . '/delete';
+
+    /** @see DocumentController::actionMy() */
+    public const DOCUMENT_MY = '/' . DocumentController::NAME . '/my';
 
     /**
      * Зарегистрированные URL, и их обработчики
@@ -39,16 +75,24 @@ class Route
     {
         return [
             /******************************** base *******************************/
-            'GET /'                     => self::ROOT,
-            'GET /about.html'           => self::ABOUT,
+            'GET /'                                    => self::ROOT,
+            'GET /about.html'                          => self::ABOUT,
 
             /******************************** registration *******************************/
-            'GET,POST /registration'    => self::REGISTRATION,
-            'GET /registration/confirm' => self::REGISTRATION_CONFIRM,
+            'GET,POST /registration'                   => self::REGISTRATION,
+            'GET /registration/confirm'                => self::REGISTRATION_CONFIRM,
 
             /******************************** login *******************************/
-            'GET,POST /login'           => self::LOGIN,
-            'POST /logout'              => self::LOGOUT,
+            'GET,POST /login'                          => self::LOGIN,
+            'POST /logout'                             => self::LOGOUT,
+
+            /******************************** document *******************************/
+            'GET,POST /doc/create'                     => self::DOCUMENT_CREATE,
+            'GET /doc/<iDocumentId:[1-9]\d*>'          => self::DOCUMENT_VIEW,
+            'GET /doc/get/<iDocumentId:[1-9]\d*>'      => self::DOCUMENT_DOWNLOAD,
+            'GET,POST /doc/upd/<iDocumentId:[1-9]\d*>' => self::DOCUMENT_UPDATE,
+            'POST /doc/del/<iDocumentId:[1-9]\d*>'     => self::DOCUMENT_DELETE,
+            'GET /doc/my'                              => self::DOCUMENT_MY,
         ];
     }
 }

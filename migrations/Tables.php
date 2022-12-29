@@ -9,7 +9,13 @@ class Tables
 {
     /**
      * Тут хранятся пользователи
-     * @see m221208_132123_create_account_table::safeUp()
+     * @see M221208132123CreateAccountTable::safeUp()
      */
-    const ACCOUNT = 'account';
+    public const ACCOUNT = 'account';
+
+    /**
+     * Тут - загруженные документы
+     * @see M221214182914CreateDocumentTable
+     */
+    public const DOCUMENT = 'document';
 }

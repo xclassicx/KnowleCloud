@@ -1,8 +1,5 @@
 <?php
 
-/** @var yii\web\View $this */
-/** @var string $content */
-
 use app\assets\AppAsset;
 use app\services\WebUser;
 use yii\base\Action;
@@ -10,6 +7,13 @@ use yii\base\Controller;
 use yii\base\Module;
 use yii\bootstrap5\Alert;
 use yii\helpers\Html;
+
+/**
+ * Vars helper. Under the cut
+ *
+ * @var yii\web\View $this
+ * @var string $content
+ */
 
 AppAsset::register($this);
 ?>
@@ -26,19 +30,18 @@ AppAsset::register($this);
 <body class="d-flex flex-column h-100">
 <?php $this->beginBody() ?>
 
-<header style="height: 56px;">
+<header>
 <?= $this->render('_navbar') ?>
 </header>
 
 <main role="main" class="flex-shrink-0">
-    <div class="container">
+    <div id="alerts" class="container">
         <?php /** FLASH MESSANGER  */
         foreach (Yii::$app->session->getAllFlashes() as $sKey => $aMessages) {
             try {
                 echo Alert::widget([
                     'options' => [
                         'class' => 'alert-' . $sKey,
-                        'style' => 'margin-bottom: 0;'
                     ],
                     'body'    => implode('<br>', $aMessages),
                 ]);
@@ -58,7 +61,8 @@ AppAsset::register($this);
     </div>
 </footer>
 
-<?php if(YII_ENV_DEV) : ?>
+<?php /* Инструменты верстки/разработки */ ?>
+<?php if(YII_ENV_DEV) {?>
     <?php $iUserID = WebUser::getAuthUser() ? WebUser::getAuthUser()->getId() : 0; ?>
     <style>
         .badge.system {
@@ -98,7 +102,7 @@ AppAsset::register($this);
     <span class="d-none d-lg-block d-xl-none system badge rounded-pill text-bg-primary" style="bottom: 145px; font-size: 16px;">LG</span>
     <span class="d-none d-xl-block d-xxl-none system badge rounded-pill text-bg-success" style="bottom: 145px; font-size: 16px;">XL</span>
     <span class="d-none d-xxl-block system badge rounded-pill text-bg-dark" style="bottom: 145px; font-size: 16px;">XXL</span>
-<?php endif; ?>
+<?php } ?>
 <?php $this->endBody() ?>
 </body>
 </html>

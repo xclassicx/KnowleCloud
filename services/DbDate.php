@@ -10,8 +10,8 @@ use DateTimeZone;
  */
 class DbDate
 {
-    const USER_TIMEZONE = 'Europe/Moscow';
-    const DB_TIMEZONE = 'GMT';
+    public const USER_TIMEZONE = 'Europe/Moscow';
+    public const DB_TIMEZONE = 'GMT';
 
     // Кэш для объектов часового пояса - чтоб не пересоздавать
     protected static DateTimeZone $userTimeZone;
@@ -34,7 +34,7 @@ class DbDate
      */
     public static function getDbTimezone(): DateTimeZone
     {
-        if (self::$dbTimeZone === null) {
+        if (!isset(self::$dbTimeZone)) {
             self::$dbTimeZone = new DateTimeZone(self::DB_TIMEZONE);
         }
 
