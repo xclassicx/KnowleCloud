@@ -25,7 +25,8 @@
     "ext-pdo": "*",
     "ext-mbstring": "*",
     "yiisoft/yii2-bootstrap5": "^2.0",
-    "yiisoft/yii2-imagine": "^2.3"
+    "yiisoft/yii2-imagine": "^2.3",
+    "yiisoft/yii2-elasticsearch": "^2.1"
   },
   "require-dev": {
     "yiisoft/yii2-debug": "~2.1.0",

@@ -51,7 +51,7 @@ if ($mDocument->isNewRecord) {
 
 <div class="text-center mt-3">
     <button type="submit" class="btn btn-success btn-lg">
-        <?= $mDocument->isNewRecord ? 'Создать' : 'Сохранить' ?>
+        <?= $mDocument->isNewRecord ? '<i class="fa fa-cloud-upload"></i>&nbsp;Создать' : '<i class="fa fa-check"></i>&nbsp;Сохранить' ?>
     </button>
 </div>
 <?php ActiveForm::end(); ?>

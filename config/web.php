@@ -11,7 +11,10 @@ use yii\web\UrlManager;
 use yii\web\UrlNormalizer;
 use yii\web\User;
 
-$db = require __DIR__ . '/db.php';
+$cache = require __DIR__ . '/components/cache.php';
+$log = require __DIR__ . '/components/log.php';
+$elasticsearch = require __DIR__ . '/components/elasticsearch.php';
+$db = require __DIR__ . '/components/db.php';
 
 $config = [
     'id'         => 'basic',
@@ -24,14 +27,11 @@ $config = [
         '@npm'   => '@vendor/npm-asset',
     ],
     'components' => [
-        'request'      => [
+        'request'       => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'Wb=%zsL=jeu.7wKbDPf7T7@3A*CYM:vVq5eDtarH?#)toFr>rw)t.sJCCFG7cfvd',
         ],
-        'cache'        => [
-            'class' => FileCache::class,
-        ],
-        'user'         => [
+        'user'          => [
             'class'           => User::class,
             'identityClass'   => Account::class,
             'enableAutoLogin' => true,
@@ -39,10 +39,10 @@ $config = [
             'loginUrl'        => [Route::LOGIN],
             'enableSession'   => true,
         ],
-        'errorHandler' => [
+        'errorHandler'  => [
             'errorAction' => 'site/error',
         ],
-        'mailer'       => [
+        'mailer'        => [
             'class'         => Mailer::class,
             'messageConfig' => [
                 'from'    => ['noreply@knowlecloud.ru' => 'knowlecloud'],
@@ -58,16 +58,7 @@ $config = [
                 //    'encryption' => 'tls', // It is often used, check your provider or mail server specs
             ],
         ],
-        'log'          => [
-            'traceLevel' => YII_DEBUG ? 3 : 0,
-            'targets'    => [
-                [
-                    'class'  => FileTarget::class,
-                    'levels' => ['error', 'warning'],
-                ],
-            ],
-        ],
-        'urlManager'   => [
+        'urlManager'    => [
             'class'               => UrlManager::class,
             'baseUrl'             => '',
             'enablePrettyUrl'     => true,
@@ -80,7 +71,10 @@ $config = [
             ],
             'rules'               => Route::getRules(),
         ],
-        'db'           => $db,
+        'cache'         => $cache,
+        'log'           => $log,
+        'elasticsearch' => $elasticsearch,
+        'db'            => $db,
     ],
 ];
 

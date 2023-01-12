@@ -3,6 +3,10 @@
 namespace app\controllers;
 
 use app\models\Document;
+use app\models\elasticsearch\Document as ElasticaDocument;
+use app\models\elasticsearch\Document as ElasticsearchDocument;
+use app\models\forms\Search;
+use app\services\Elastica;
 use app\services\Flash;
 use app\services\Route;
 use app\services\WebUser;
@@ -26,6 +30,9 @@ class DocumentController extends Controller
 {
     const NAME = 'document';
 
+    const MAX_RESULT_PAGES = 100;
+    const PER_PAGE = 12;
+
     /**
      * @inheritDoc
      */
@@ -40,7 +47,7 @@ class DocumentController extends Controller
             ],
             'access' => [
                 'class'  => AccessControl::class,
-                'except' => ['view', 'download'],
+                'except' => ['view', 'download', 'search'],
                 'rules'  => [
                     [
                         'allow' => true,
@@ -49,6 +56,44 @@ class DocumentController extends Controller
                 ],
             ],
         ];
+    }
+
+    /**
+     * @return string
+     * @throws \yii\web\NotFoundHttpException
+     * @see Route::DOCUMENT_SEARCH
+     */
+    public function actionSearch(): string
+    {
+        // слишком большой номер страницы может приводить к ошибке запроса Result window is too large
+        if ((int)\Yii::$app->request->get('page') > self::MAX_RESULT_PAGES) {
+            throw new NotFoundHttpException();
+        }
+
+        $dataProvider = false;
+        $mSearch = new Search();
+        $aQueryParams = \Yii::$app->request->getQueryParams();
+        if ($mSearch->load($aQueryParams, '') && $mSearch->validate()) {
+            $elasticaUserQuery = ElasticsearchDocument::find()
+                ->query([
+                    'simple_query_string' => [
+                        'fields' => ['name', 'keywords'],
+                        'query'  => Elastica::escapeQuery($mSearch->q),
+                    ],
+                ]);
+            $dataProvider = new ActiveDataProvider([
+                'query'      => $elasticaUserQuery,
+                'pagination' => [
+                    'pageSize'        => self::PER_PAGE,
+                    'defaultPageSize' => self::PER_PAGE,
+                ],
+            ]);
+        }
+
+        return $this->render('search', [
+            'dataProvider' => $dataProvider,
+            'mSearch'      => $mSearch,
+        ]);
     }
 
     /**
@@ -63,7 +108,7 @@ class DocumentController extends Controller
             'query' => Document::find()->whereOwner(WebUser::getAuthUser()),
 
             'pagination' => [
-                'pageSize' => 24,
+                'pageSize' => self::PER_PAGE,
             ],
         ]);
 
@@ -114,6 +159,9 @@ class DocumentController extends Controller
                 throw new UserException('Ошибка создания превью');
             }
 
+            if ($mDocument->isPublic()) {
+                ElasticaDocument::factory($mDocument)->save();
+            }
         } catch (Throwable $ex) {
             $transaction->rollBack();
 
@@ -197,6 +245,11 @@ class DocumentController extends Controller
             return $this->render('update', [
                 'mDocument' => $mDocument,
             ]);
+        }
+        if ($mDocument->isPublic()) {
+            ElasticaDocument::factory($mDocument)->save();
+        } else {
+            ElasticaDocument::factory($mDocument)->delete();
         }
 
         Flash::addSuccess('Документ обновлен');

@@ -20,12 +20,19 @@ $mAuthUser = WebUser::getAuthUser();
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarContent">
-            <ul class="d-flex navbar-nav mb-2 mb-lg-0">
+
+            <?php /** Тут проще вручную форму собрать, чем юзать ActiveForm */ ?>
+            <form class="me-auto" role="search" action="<?= Url::toRoute([Route::DOCUMENT_SEARCH]) ?>">
+                <div class="input-group">
+                    <input class="form-control" type="search" name="q" placeholder="Что ищем?" required>
+                    <button class="btn btn-outline-success" type="submit"><i class="fa fa-search"></i></button>
+                </div>
+            </form>
+
+            <ul class="d-flex ms-auto navbar-nav mb-2 mb-lg-0">
                 <li class="nav-item">
                     <a class="nav-link" href="<?= Url::toRoute(Route::ABOUT) ?>">О проекте</a>
                 </li>
-            </ul>
-            <ul class="d-flex ms-auto navbar-nav mb-2 mb-lg-0">
                 <?php if($mAuthUser === null) { ?>
                 <li class="nav-item"><a class="nav-link" href="<?= Url::toRoute(Route::LOGIN) ?>">Войти</a></li>
                 <li class="nav-item"><a class="nav-link" href="<?= Url::toRoute(Route::REGISTRATION) ?>">Зарегистрироваться</a></li>
@@ -35,10 +42,22 @@ $mAuthUser = WebUser::getAuthUser();
                         <?= Html::encode($mAuthUser->getSiteName()) ?>
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="<?= Url::toRoute(Route::DOCUMENT_CREATE) ?>">Загрузить документ</a></li>
-                        <li><a class="dropdown-item" href="<?= Url::toRoute(Route::DOCUMENT_MY) ?>">Мои документы</a></li>
+                        <li>
+                            <a class="dropdown-item" href="<?= Url::toRoute(Route::DOCUMENT_CREATE) ?>">
+                                <i class="fa fa-cloud-upload"></i>&nbsp;Загрузить&nbsp;документ
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="<?= Url::toRoute(Route::DOCUMENT_MY) ?>">
+                                <i class="fa fa-th"></i>&nbsp;Мои&nbsp;документы
+                            </a>
+                        </li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="<?= Url::toRoute(Route::LOGOUT) ?>" data-method="post">Выйти</a></li>
+                        <li>
+                            <a class="dropdown-item" href="<?= Url::toRoute(Route::LOGOUT) ?>" data-method="post">
+                                <i class="fa fa-sign-out"></i>&nbsp;Выйти
+                            </a>
+                        </li>
                     </ul>
                 </li>
                 <?php } ?>

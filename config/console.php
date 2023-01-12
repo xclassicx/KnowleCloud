@@ -1,14 +1,18 @@
 <?php
 
-use yii\caching\FileCache;
+use app\commands\ElasticaController;
 use yii\console\controllers\MigrateController;
 use yii\gii\Module as GiiModule;
-use yii\log\FileTarget;
 
-$db = require __DIR__ . '/db.php';
+$cache = require __DIR__ . '/components/cache.php';
+$log = require __DIR__ . '/components/log.php';
+$elasticsearch = require __DIR__ . '/components/elasticsearch.php';
+$db = require __DIR__ . '/components/db.php';
 
 $config = [
     'id'                  => 'basic-console',
+    'name'                => 'knowlecloud',
+    'language'            => 'ru-RU',
     'basePath'            => dirname(__DIR__),
     'bootstrap'           => ['log'],
     'controllerNamespace' => 'app\commands',
@@ -17,7 +21,7 @@ $config = [
         '@npm'   => '@vendor/npm-asset',
     ],
     'controllerMap'       => [
-        'migrate' => [
+        'migrate'  => [
             'class'               => MigrateController::class,
             'migrationPath'       => [
                 //'@yii/rbac/migrations',
@@ -26,20 +30,15 @@ $config = [
                 'app\migrations',
             ],
         ],
+        'elastica' => [
+            'class' => ElasticaController::class,
+        ],
     ],
     'components'          => [
-        'cache' => [
-            'class' => FileCache::class,
-        ],
-        'log'   => [
-            'targets' => [
-                [
-                    'class'  => FileTarget::class,
-                    'levels' => ['error', 'warning'],
-                ],
-            ],
-        ],
-        'db'    => $db,
+        'cache'         => $cache,
+        'log'           => $log,
+        'elasticsearch' => $elasticsearch,
+        'db'            => $db,
     ],
 ];
 

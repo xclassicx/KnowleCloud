@@ -18,7 +18,7 @@ $this->title = 'Документ "' . $mDocument->getName() . '"';
 ?>
 <?php if(!$mDocument->isPublic()) { ?>
     <div class="alert alert-info mt-2" role="alert">
-        Это приватный документ. Доступ к нему есть только у тех, кто знает специальную ссылку!<br>
+        <i class="fa fa-lock"></i> Это приватный документ. Доступ к нему есть только у тех, кто знает специальную ссылку!<br>
         Специальная ссылка: <strong><?= DocumentService::getViewUrl($mDocument, true) ?></strong>
     </div>
 <?php } ?>
@@ -31,19 +31,23 @@ $this->title = 'Документ "' . $mDocument->getName() . '"';
                 <p><?= nl2br(Html::encode($mDocument->getKeywords())) ?></p>
                 <p class="text-end">
                     <small class="text-muted">
-                        <?= DateFormat::datetimeShort($mDocument->getCreated()) ?>,<br>
-                        <strong><?= Html::encode($mDocument->getOwner()->getSiteName()) ?></strong>
+                        <i class="fa fa-clock-o"></i> <?= DateFormat::datetimeShort($mDocument->getCreated()) ?><br>
+                        <i class="fa fa-user"></i> <strong><?= Html::encode($mDocument->getOwner()->getSiteName()) ?></strong>
                     </small>
                 </p>
             </div>
             <div class="card-footer text-center">
                 <a class="btn btn-success" href="<?= DocumentService::getDownloadUrl($mDocument) ?>">
-                    Скачать
+                    <i class="fa fa-download"></i>&nbsp;Скачать
                 </a>
                 <?php if ($mDocument->isOwner(WebUser::getAuthUser())) { ?>
-                    <a class="btn btn-primary" href="<?= Url::toRoute([Route::DOCUMENT_UPDATE, 'iDocumentId' => $mDocument->getId()]) ?>">Изменить</a>
+                    <a class="btn btn-primary" href="<?= Url::toRoute([Route::DOCUMENT_UPDATE, 'iDocumentId' => $mDocument->getId()]) ?>">
+                        <i class="fa fa-edit"></i>&nbsp;Изменить
+                    </a>
                     <a class="btn btn-danger" href="<?= Url::toRoute([Route::DOCUMENT_DELETE, 'iDocumentId' => $mDocument->getId()]) ?>"
-                       data-confirm="Точно удалить?" data-method="post">Удалить</a>
+                       data-confirm="Точно удалить?" data-method="post">
+                        <i class="fa fa-remove"></i>&nbsp;Удалить
+                    </a>
                 <?php } ?>
             </div>
         </div>

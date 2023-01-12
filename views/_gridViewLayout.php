@@ -15,5 +15,5 @@
     {items}
 </div>
 <div class='row'>
-    <div class='col-xs-12 text-center'>{pager}</div>
+    <div class='col-xs-12 text-center mt-5'>{pager}</div>
 </div>

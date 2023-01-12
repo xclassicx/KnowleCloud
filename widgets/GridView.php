@@ -2,6 +2,7 @@
 
 namespace app\widgets;
 
+use yii\bootstrap5\LinkPager;
 use yii\widgets\ListView;
 
 /**
@@ -9,6 +10,16 @@ use yii\widgets\ListView;
  */
 class GridView extends ListView
 {
+    /**
+     * bootstrap5 паждинатор
+     *
+     * @var array
+     */
+    public $pager = [
+        'class'       => LinkPager::class,
+        'listOptions' => ['class' => ['pagination justify-content-center']],
+    ];
+
     public string $sModelViewName = 'model';
 
     /**

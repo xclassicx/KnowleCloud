@@ -18,7 +18,9 @@ $this->title = 'Мои документы';
 
 <h1 class="mt-5"><?= Html::encode($this->title) ?></h1>
 <p>
-    <a class="btn btn-success" href="<?= Url::toRoute(Route::DOCUMENT_CREATE) ?>">Загрузить документ</a>
+    <a class="btn btn-success" href="<?= Url::toRoute(Route::DOCUMENT_CREATE) ?>">
+        <i class="fa fa-cloud-upload"></i>&nbsp;Загрузить документ
+    </a>
 </p>
 
 <?php try { ?>

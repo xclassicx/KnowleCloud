@@ -15,7 +15,6 @@ Store and share
 
 * Клонируем репозитарий на хост-машине `git clone git@github.com:xclassicx/KnowleCloud.git`
 * Кладем в корень клонированного проекта скрипты из архива `_pt-slug.zip`
-* Проверяем доступен ли https://artifacts.elastic.co/GPG-KEY-elasticsearch. Если нет - включаем VPN
 * При первом запуске `vagrant up` в любом случае включаем VPN - нужно для скачивания бокса и плагинов
 * Устанавливаем плагин для NFS `vagrant plugin install vagrant-winnfsd`(Если его нет в списке `vagrant plugin list`)
 * В корне клонированного проекта запускаем установку виртуалки `vagrant up`
@@ -28,12 +27,24 @@ Store and share
 * Переходим в каталог `cd /var/www/knowlecloud.test`
 * Устанавливаем пакеты `composer install --prefer-dist`
 * Инициализируем SQLite `php yii migrate`
-* (Пока нет - будет после загрузки файлов) Инициализируем индексы эластики `php yii elastica-init/init`
+* Инициализируем индексы эластики `php yii elastica/run`
 
 #### База данных
 
 SQLite, живет в `knowlecloud.test/db/db.sqlite` 
 Все обновления схемы устанавливаются через `php yii migrate`
+
+#### Elasticsearch
+
+Тк. Офицальный репозитарий недоступен с Ру ip и VPN помогает слабо, в виртуалку Elasticsearch устанавливаем из скачанного пакета - см. `_pt-slug.zip\data\elasticsearch-8.1.1-amd64.deb`
+
+Краткий перечень полезных команд для Elasticsearch:
+
+    curl 'localhost:9200/' - информация о установленом Elasticsearch
+    curl 'localhost:9200/_cat/indices?v' - информация о созданых индексах
+    curl -XGET 'localhost:9200/knowlecloud.document.dev/_mapping?pretty' - информация о меппингах в указаном индексе
+    curl -XPOST 'localhost:9200/knowlecloud.document.dev/_search?pretty' - 10 последних записйе в указанном индексе
+    curl -XDELETE 'localhost:9200/knowlecloud.document.dev/' - удаление индекса
 
 ##### SASS -> CSS
 

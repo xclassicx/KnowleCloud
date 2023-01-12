@@ -68,6 +68,9 @@ class Route
     /** @see DocumentController::actionMy() */
     public const DOCUMENT_MY = '/' . DocumentController::NAME . '/my';
 
+    /** @see DocumentController::actionSearch() */
+    public const DOCUMENT_SEARCH = '/' . DocumentController::NAME . '/search';
+
     /**
      * Зарегистрированные URL, и их обработчики
      */
@@ -93,6 +96,7 @@ class Route
             'GET,POST /doc/upd/<iDocumentId:[1-9]\d*>' => self::DOCUMENT_UPDATE,
             'POST /doc/del/<iDocumentId:[1-9]\d*>'     => self::DOCUMENT_DELETE,
             'GET /doc/my'                              => self::DOCUMENT_MY,
+            'GET /doc/search'                          => self::DOCUMENT_SEARCH,
         ];
     }
 }
