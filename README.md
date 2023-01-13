@@ -1,10 +1,28 @@
 # KnowleCloud
+
 Store and share
 
+## Public knowlecloud.ru
+
+Заведены ssh пользователи **matvei** и **arsenii**, с возможностью `sudo su www-data`
+
+Сайт knowlecloud.ru смотрит на ветку main. Для обновления нужно сделать:
+
+    cd /var/www/knowlecloud.ru
+    sudo su www-data
+    git pull
+
+Использование `git status`, `composer install --no-dev`, `php yii migrate`, итд - по необходимости.
+
+Для общего понимания: директорию /var/www/knowlecloud.ru может править только пользователь www-data. От его имени совершаются все действия с загружаемыми
+файлами, бд, и всем на сайте
+
 ## Создание _dev_ пошагово
+
 ### Подготовка
 
 Должны быть установлены:
+
 * Virtualbox 5
 * Vagrant 2
 * git client
@@ -31,12 +49,13 @@ Store and share
 
 #### База данных
 
-SQLite, живет в `knowlecloud.test/db/db.sqlite` 
+SQLite, живет в `knowlecloud.test/db/db.sqlite`
 Все обновления схемы устанавливаются через `php yii migrate`
 
 #### Elasticsearch
 
-Тк. Офицальный репозитарий недоступен с Ру ip и VPN помогает слабо, в виртуалку Elasticsearch устанавливаем из скачанного пакета - см. `_pt-slug.zip\data\elasticsearch-8.1.1-amd64.deb`
+Тк. Офицальный репозитарий недоступен с Ру ip и VPN помогает слабо, в виртуалку Elasticsearch устанавливаем из скачанного пакета -
+см. `_pt-slug.zip\data\elasticsearch-8.1.1-amd64.deb`
 
 Краткий перечень полезных команд для Elasticsearch:
 
