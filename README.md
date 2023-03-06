@@ -44,8 +44,9 @@ Store and share
 * Авторизуемся по SSH на `vagrant@knowlecloud.test` с паролем **vagrant**
 * Переходим в каталог `cd /var/www/knowlecloud.test`
 * Устанавливаем пакеты `composer install --prefer-dist`
+* Устанавливаем переменную окружения для CLI `export YII_ENV=dev`
 * Инициализируем SQLite `php yii migrate`
-* Инициализируем индексы эластики `php yii elastica/run`
+* Инициализируем индексы эластики `php yii elastica/run` (**имя индекса зависит от YII_ENV!**)
 
 #### База данных
 
@@ -55,7 +56,7 @@ SQLite, живет в `knowlecloud.test/db/db.sqlite`
 #### Elasticsearch
 
 Тк. Офицальный репозитарий недоступен с Ру ip и VPN помогает слабо, в виртуалку Elasticsearch устанавливаем из скачанного пакета -
-см. `_pt-slug.zip\data\elasticsearch-8.1.1-amd64.deb`
+см. `_pt-slug.zip\data\elasticsearch-8.1.1-amd64.deb` (при первом vagrant up устанавливается само в provision.sh)
 
 Краткий перечень полезных команд для Elasticsearch:
 
@@ -67,7 +68,7 @@ SQLite, живет в `knowlecloud.test/db/db.sqlite`
 
 ##### SASS -> CSS
 
-compass Готов к использованию после установки пакетов композером(Для упрощения пока не используется).
+Compass Готов к использованию после установки пакетов композером(Для упрощения пока не используется).
 
 Запустить компиляцию css:
 

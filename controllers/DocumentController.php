@@ -1,5 +1,7 @@
 <?php
 
+/** @noinspection PhpUnhandledExceptionInspection */
+
 namespace app\controllers;
 
 use app\models\Document;
@@ -66,13 +68,13 @@ class DocumentController extends Controller
     public function actionSearch(): string
     {
         // слишком большой номер страницы может приводить к ошибке запроса Result window is too large
-        if ((int)\Yii::$app->request->get('page') > self::MAX_RESULT_PAGES) {
+        if ((int)Yii::$app->request->get('page') > self::MAX_RESULT_PAGES) {
             throw new NotFoundHttpException();
         }
 
         $dataProvider = false;
         $mSearch = new Search();
-        $aQueryParams = \Yii::$app->request->getQueryParams();
+        $aQueryParams = Yii::$app->request->getQueryParams();
         if ($mSearch->load($aQueryParams, '') && $mSearch->validate()) {
             $elasticaUserQuery = ElasticsearchDocument::find()
                 ->query([
@@ -277,6 +279,10 @@ class DocumentController extends Controller
             // Именно такой порядок удаления "модель -> превью -> файл" позволяет восстановить все как было, при возникновении ошибки
             if (!$mDocument->delete()) {
                 throw new UserException(implode($mDocument->getFirstErrors()));
+            }
+
+            if(!ElasticaDocument::factory($mDocument)->delete()) {
+                throw new UserException('Не смог удалить документ из поискового индекса');
             }
 
             if ($hasPreview && unlink($sPreviewPath) === false) {

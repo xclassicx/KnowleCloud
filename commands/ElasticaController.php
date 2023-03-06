@@ -29,12 +29,16 @@ class ElasticaController extends Controller
      */
     public function actionRun(): int
     {
+        // Проверяем, существует ли индекс
         $aIndices = ElasticaDocument::getDb()->createCommand()->getIndexStats()['indices'];
         if (array_key_exists(ElasticaDocument::index(), $aIndices) === false) {
+            // Если нет - создаем
             ElasticaDocument::createIndex();
+            // Устанавливаем количество проиндексированных документов
             $this->setIndexRoutineOffset(0);
         }
 
+        // Индексируем по RUN_ROUTINE_LIMIT документов на запуск, с учетом $this->getIndexRoutineOffset() уже проиндексированных
         if (($iIndexRoutineOffset = $this->getIndexRoutineOffset()) !== false) {
             $this->stdout('Indexing...' . PHP_EOL);
 
